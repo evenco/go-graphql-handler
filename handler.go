@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strings"
 
+	"golang.org/x/net/context"
+
 	"github.com/gorilla/schema"
 	"github.com/graphql-go/graphql"
 	"github.com/unrolled/render"
@@ -105,7 +107,7 @@ func getRequestOptions(r *http.Request) *requestOptions {
 }
 
 // ServeHTTP provides an entry point into executing graphQL queries
-func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ServeHTTP(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 
 	// get query
 	opts := getRequestOptions(r)
@@ -117,7 +119,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		VariableValues: opts.Variables,
 		OperationName:  opts.OperationName,
 	}
-	result := graphql.Graphql(params)
+	result := graphql.Graphql(ctx, params)
 
 	// render result
 	h.render.JSON(w, http.StatusOK, result)
