@@ -8,8 +8,8 @@ import (
 
 	"golang.org/x/net/context"
 
+	"github.com/evenco/go-graphql"
 	"github.com/gorilla/schema"
-	"github.com/graphql-go/graphql"
 	"github.com/unrolled/render"
 )
 
