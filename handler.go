@@ -9,6 +9,7 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/evenco/go-graphql"
+	"github.com/evenco/go-logger"
 	"github.com/gorilla/schema"
 	"github.com/unrolled/render"
 )
@@ -120,6 +121,10 @@ func (h *Handler) ServeHTTP(ctx context.Context, w http.ResponseWriter, r *http.
 		OperationName:  opts.OperationName,
 	}
 	result := graphql.Graphql(ctx, params)
+
+	for _, err := range result.Errors {
+		log.Error(ctx, "GraphQL error", err, nil)
+	}
 
 	// render result
 	h.render.JSON(w, http.StatusOK, result)
